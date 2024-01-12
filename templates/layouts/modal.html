@@ -1,0 +1,22 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#{% block modal_id %}{% endblock %}">
+  {% block button %}{% endblock %}
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="{% block modal__id %}{% endblock %}" tabindex="5" aria-labelledby="exampleModalLabel" aria-hidden="true" style="height: auto;">
+  <div class="modal-dialog" >
+    <div class="modal-content" >
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{% block modal_title %}{% endblock %}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {% block modal_body %}{% endblock %}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

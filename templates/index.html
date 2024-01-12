@@ -1,0 +1,61 @@
+{% extends "layouts/layout.html" %}
+{% block content %}
+
+<ul class="nav nav-tabs border-0 mb-2 p-2 bg-secondary bg-opacity-25" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button aria-controls="home" aria-selected="true" class="nav-link text-white active" data-bs-target="#home"
+                data-bs-toggle="tab"
+                id="home-tab" role="tab" type="button">Books
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button aria-controls="profile" aria-selected="false" class="nav-link text-white" data-bs-target="#profile"
+                data-bs-toggle="tab"
+                id="profile-tab" role="tab" type="button">Members
+        </button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button aria-controls="contact" aria-selected="false" class="nav-link text-white" data-bs-target="#contact"
+                data-bs-toggle="tab"
+                id="contact-tab" role="tab" type="button">Lends
+        </button>
+    </li>
+</ul>
+<div class="tab-content bg-secondary bg-opacity-25 p-2" id="myTabContent">
+    <div aria-labelledby="home-tab" class="tab-pane fade show active" id="home" role="tabpanel">
+        {% include "createBookModal.html" %}
+        <!-- Book List -->
+        <h4 class="mt-4 text-white">Books</h4>
+        <table class="table text-light">
+            <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Quantity</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.quantity }}</td>
+                <td>
+                    <a class="btn btn-info" href="{{ url_for('edit_book', book_id=book.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST"
+                          style="display:inline-block;">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div aria-labelledby="profile-tab" class="tab-pane fade" id="profile" role="tabpanel">...</div>
+    <div aria-labelledby="contact-tab" class="tab-pane fade" id="contact" role="tabpanel">...</div>
+</div>
+
+
+{% endblock %}
