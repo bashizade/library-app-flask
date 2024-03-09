@@ -1,0 +1,18 @@
+{% extends "layouts/modal.html" %}
+
+{% block button %}Add Member{% endblock %}
+
+{% block modal_id %}add_member{% endblock %}
+{% block modal__id %}add_member{% endblock %}
+
+{% block modal_title %}Add Member{% endblock %}
+{% block modal_body %}
+<!-- Add Book Form -->
+<form action="{{ url_for('add_member') }}" method="POST" class="d-flex flex-column">
+    <input name="name" placeholder="name" required type="text" class="mt-2 form-control">
+    <input name="email" placeholder="email" required type="text" class="mt-2 form-control">
+    <button class="btn btn-primary mt-2" type="submit">Add Member</button>
+</form>
+
+{% endblock %}
+

@@ -53,8 +53,61 @@
             </tbody>
         </table>
     </div>
-    <div aria-labelledby="profile-tab" class="tab-pane fade" id="profile" role="tabpanel">...</div>
-    <div aria-labelledby="contact-tab" class="tab-pane fade" id="contact" role="tabpanel">...</div>
+    <div aria-labelledby="profile-tab" class="tab-pane fade" id="profile" role="tabpanel">
+        {% include "createMemberModal.html" %}
+        <h4 class="mt-4 text-white">Members</h4>
+        <table class="table text-light">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for member in members %}
+            <tr>
+                <td>{{ member.name }}</td>
+                <td>{{ member.email }}</td>
+                <td>
+                    <a class="btn btn-info" href="{{ url_for('edit_member', member_id=member.id) }}">Edit</a>
+                    <form action="{{ url_for('delete_member', member_id=member.id) }}" method="POST"
+                          style="display:inline-block;">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div aria-labelledby="contact-tab" class="tab-pane fade" id="contact" role="tabpanel">
+        {% include "createLendModal.html" %}
+        <h4 class="mt-4 text-white">Lends</h4>
+        <table class="table text-light">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for lend in lends %}
+            <tr>
+                <td>{{ lend.member.name }}</td>
+                <td>{{ lend.book.title }}</td>
+                <td>
+                    <form action="{{ url_for('return_book', lend_id=lend.id) }}" method="POST"
+                          style="display:inline-block;">
+                        <button class="btn btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 

@@ -1,0 +1,12 @@
+{% extends "layouts/layout.html" %}
+{% block content %}
+<div class="container">
+    <!-- Form to edit a member -->
+    <h2 class="text-light">Edit Member</h2>
+    <form method="POST" action="{{ url_for('edit_member', member_id=member.id) }}">
+        <input type="text" name="name" value="{{ member.name }}" required>
+        <input type="text" name="email" value="{{ member.email }}" required>
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </form>
+</div>
+{% endblock %}

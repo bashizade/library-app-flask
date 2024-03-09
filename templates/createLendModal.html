@@ -1,0 +1,29 @@
+{% extends "layouts/modal.html" %}
+
+{% block button %}Add Lend{% endblock %}
+
+{% block modal_id %}add_lend{% endblock %}
+{% block modal__id %}add_lend{% endblock %}
+
+{% block modal_title %}Add Lend{% endblock %}
+{% block modal_body %}
+<!-- Add Book Form -->
+<form action="{{ url_for('lend_book') }}" method="POST" class="d-flex flex-column">
+    <select name="member_id" required class="mt-2 form-control">
+        <option value="">select member</option>
+        {% for member in members %}
+            <option value="{{member.id}}">{{member.name}}</option>
+        {% endfor %}
+    </select>
+    <select name="book_id" required class="mt-2 form-control">
+        <option value="">select book</option>
+        {% for book in books %}
+            <option value="{{book.id}}">{{book.title}}</option>
+        {% endfor %}
+    </select>
+    <input name="due_date" placeholder="date" required type="date" class="mt-2 form-control">
+    <button class="btn btn-primary mt-2" type="submit">Add Book</button>
+</form>
+
+{% endblock %}
+

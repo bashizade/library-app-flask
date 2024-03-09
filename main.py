@@ -33,7 +33,7 @@ class Lend(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     member_id = db.Column(db.Integer, db.ForeignKey('member.id'), nullable=False)
     book_id = db.Column(db.Integer, db.ForeignKey('book.id'), nullable=False)
-    due_date = db.Column(db.DateTime, nullable=False)
+    due_date = db.Column(db.String(100), nullable=False)
 
     member = db.relationship('Member', backref=db.backref('lends', lazy=True))
     book = db.relationship('Book', backref=db.backref('lends', lazy=True))
@@ -52,7 +52,8 @@ create_tables()
 def index():
     books = Book.query.all()
     members = Member.query.all()
-    return render_template("index.html", books=books, members=members)
+    lends = Lend.query.all()
+    return render_template("index.html", books=books, members=members, lends=lends)
 
 
 @app.route('/add_book', methods=['POST'])
