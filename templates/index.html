@@ -1,114 +1,255 @@
-{% extends "layouts/layout.html" %}
-{% block content %}
+{% extends "layouts/layout.html" %} {% block content %}
 
-<ul class="nav nav-tabs border-0 mb-2 p-2 bg-secondary bg-opacity-25" id="myTab" role="tablist">
-    <li class="nav-item" role="presentation">
-        <button aria-controls="home" aria-selected="true" class="nav-link text-white active" data-bs-target="#home"
-                data-bs-toggle="tab"
-                id="home-tab" role="tab" type="button">Books
-        </button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button aria-controls="profile" aria-selected="false" class="nav-link text-white" data-bs-target="#profile"
-                data-bs-toggle="tab"
-                id="profile-tab" role="tab" type="button">Members
-        </button>
-    </li>
-    <li class="nav-item" role="presentation">
-        <button aria-controls="contact" aria-selected="false" class="nav-link text-white" data-bs-target="#contact"
-                data-bs-toggle="tab"
-                id="contact-tab" role="tab" type="button">Lends
-        </button>
-    </li>
+<ul
+  class="nav nav-tabs border-0 mb-2 p-2 bg-secondary bg-opacity-25"
+  id="myTab"
+  role="tablist"
+>
+  <li class="nav-item" role="presentation">
+    <button
+      aria-controls="home"
+      aria-selected="true"
+      class="nav-link text-white active"
+      data-bs-target="#home"
+      data-bs-toggle="tab"
+      id="home-tab"
+      role="tab"
+      type="button"
+    >
+      Books
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button
+      aria-controls="profile"
+      aria-selected="false"
+      class="nav-link text-white"
+      data-bs-target="#profile"
+      data-bs-toggle="tab"
+      id="profile-tab"
+      role="tab"
+      type="button"
+    >
+      Members
+    </button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button
+      aria-controls="contact"
+      aria-selected="false"
+      class="nav-link text-white"
+      data-bs-target="#contact"
+      data-bs-toggle="tab"
+      id="contact-tab"
+      role="tab"
+      type="button"
+    >
+      Lends
+    </button>
+  </li>
 </ul>
 <div class="tab-content bg-secondary bg-opacity-25 p-2" id="myTabContent">
-    <div aria-labelledby="home-tab" class="tab-pane fade show active" id="home" role="tabpanel">
-        {% include "createBookModal.html" %}
-        <!-- Book List -->
-        <h4 class="mt-4 text-white">Books</h4>
-        <table class="table text-light">
-            <thead>
-            <tr>
-                <th>Title</th>
-                <th>Author</th>
-                <th>Quantity</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for book in books %}
-            <tr>
-                <td>{{ book.title }}</td>
-                <td>{{ book.author }}</td>
-                <td>{{ book.quantity }}</td>
-                <td>
-                    <a class="btn btn-info" href="{{ url_for('edit_book', book_id=book.id) }}">Edit</a>
-                    <form action="{{ url_for('delete_book', book_id=book.id) }}" method="POST"
-                          style="display:inline-block;">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div aria-labelledby="profile-tab" class="tab-pane fade" id="profile" role="tabpanel">
-        {% include "createMemberModal.html" %}
-        <h4 class="mt-4 text-white">Members</h4>
-        <table class="table text-light">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for member in members %}
-            <tr>
-                <td>{{ member.name }}</td>
-                <td>{{ member.email }}</td>
-                <td>
-                    <a class="btn btn-info" href="{{ url_for('edit_member', member_id=member.id) }}">Edit</a>
-                    <form action="{{ url_for('delete_member', member_id=member.id) }}" method="POST"
-                          style="display:inline-block;">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <div aria-labelledby="contact-tab" class="tab-pane fade" id="contact" role="tabpanel">
-        {% include "createLendModal.html" %}
-        <h4 class="mt-4 text-white">Lends</h4>
-        <table class="table text-light">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for lend in lends %}
-            <tr>
-                <td>{{ lend.member.name }}</td>
-                <td>{{ lend.book.title }}</td>
-                <td>
-                    <form action="{{ url_for('return_book', lend_id=lend.id) }}" method="POST"
-                          style="display:inline-block;">
-                        <button class="btn btn-danger" type="submit">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+  <div
+    aria-labelledby="home-tab"
+    class="tab-pane fade show active"
+    id="home"
+    role="tabpanel"
+  >
+    {% include "createBookModal.html" %}
+    <!-- Book List -->
+    <h4 class="mt-4 text-white">Books</h4>
+    <input
+      type="text"
+      id="book_input"
+      onkeyup="book_search()"
+      placeholder="Search for books.."
+      class="form-control"
+    />
+    <table class="table text-light" id="book_table">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Author</th>
+          <th>Quantity</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for book in books %}
+        <tr>
+          <td>{{ book.title }}</td>
+          <td>{{ book.author }}</td>
+          <td>{{ book.quantity }}</td>
+          <td>
+            <a
+              class="btn btn-info"
+              href="{{ url_for('edit_book', book_id=book.id) }}"
+              >Edit</a
+            >
+            <form
+              action="{{ url_for('delete_book', book_id=book.id) }}"
+              method="POST"
+              style="display: inline-block"
+            >
+              <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div
+    aria-labelledby="profile-tab"
+    class="tab-pane fade"
+    id="profile"
+    role="tabpanel"
+  >
+    {% include "createMemberModal.html" %}
+    <h4 class="mt-4 text-white">Members</h4>
+    <input
+      type="text"
+      id="member_input"
+      onkeyup="member_search()"
+      placeholder="Search for members.."
+      class="form-control"
+    />
+    <table class="table text-light" id="member_table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for member in members %}
+        <tr>
+          <td>{{ member.name }}</td>
+          <td>{{ member.email }}</td>
+          <td>
+            <a
+              class="btn btn-info"
+              href="{{ url_for('edit_member', member_id=member.id) }}"
+              >Edit</a
+            >
+            <form
+              action="{{ url_for('delete_member', member_id=member.id) }}"
+              method="POST"
+              style="display: inline-block"
+            >
+              <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div
+    aria-labelledby="contact-tab"
+    class="tab-pane fade"
+    id="contact"
+    role="tabpanel"
+  >
+    {% include "createLendModal.html" %}
+    <h4 class="mt-4 text-white">Lends</h4>
+    <input
+      type="text"
+      id="lend_input"
+      onkeyup="lend_search()"
+      placeholder="Search for lends.."
+      class="form-control"
+    />
+    <table class="table text-light" id="lend_table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Book Name</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for lend in lends %}
+        <tr>
+          <td>{{ lend.member.name }}</td>
+          <td>{{ lend.book.title }}</td>
+          <td>
+            <form
+              action="{{ url_for('return_book', lend_id=lend.id) }}"
+              method="POST"
+              style="display: inline-block"
+            >
+              <button class="btn btn-danger" type="submit">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
+<script>
+  function book_search() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("book_input");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("book_table");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+  function member_search() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("member_input");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("member_table");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+
+  function lend_search() {
+    var input, filter, table, tr, td, i, txtValue;
+    input = document.getElementById("lend_input");
+    filter = input.value.toUpperCase();
+    table = document.getElementById("lend_table");
+    tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+      td = tr[i].getElementsByTagName("td")[0];
+      if (td) {
+        txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+          tr[i].style.display = "";
+        } else {
+          tr[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
 
 {% endblock %}

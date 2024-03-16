@@ -84,10 +84,15 @@ def lend_book():
     member_id = request.form.get('member_id')
     book_id = request.form.get('book_id')
     due_date = request.form.get('due_date')
-    lend = Lend(member_id=member_id, book_id=book_id, due_date=due_date)
-    db.session.add(lend)
-    db.session.commit()
-    flash('Book lent successfully!')
+
+    old_lend = Lend.query.filter(Lend.member_id == member_id)
+    if old_lend == 0:
+        lend = Lend(member_id=member_id, book_id=book_id, due_date=due_date)
+        db.session.add(lend)
+        db.session.commit()
+        flash('Book lent successfully!')
+    else:
+        flash('this user lented another book')
     return redirect(url_for('index'))
 
 
